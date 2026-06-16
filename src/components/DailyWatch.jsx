@@ -22,9 +22,9 @@ export default function DailyWatch({ nodes }) {
 
   const today = state[date] || {}
 
-  // 每 10 秒走一次时钟（更新高亮 + 触发提醒检查）
+  // 每秒走一次时钟（平滑显示秒 + 更新高亮 + 触发到点提醒检查）
   useEffect(() => {
-    const timer = setInterval(() => setClock(new Date()), 10000)
+    const timer = setInterval(() => setClock(new Date()), 1000)
     return () => clearInterval(timer)
   }, [])
 
