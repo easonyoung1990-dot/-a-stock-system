@@ -13,6 +13,8 @@ const RECORDS_KEY = 'astock_records_v1'
 const WATCH_CONFIG_KEY = 'astock_watch_config_v1'
 const WATCH_STATE_KEY = 'astock_watch_state_v1'
 const WATCH_PREF_KEY = 'astock_watch_pref_v1'
+const METHODOLOGY_KEY = 'astock_methodology_v1'
+const ARCHIVE_KEY = 'astock_ai_archive_v1'
 
 // ---------- 默认方法论配置（用户可改）----------
 export const DEFAULT_CONFIG = {
@@ -174,4 +176,53 @@ export function loadWatchPref() {
 
 export function saveWatchPref(pref) {
   localStorage.setItem(WATCH_PREF_KEY, JSON.stringify(pref))
+}
+
+// ============================================================
+// AI 投研助手 —— 「我的方法论」知识库 + 分析档案
+// ------------------------------------------------------------
+// 「我的方法论」是用户录入的整套买卖技术，将来作为大模型的「大脑」
+// （系统提示词）。现在先存浏览器本地，等接入模型后由后端读取。
+// ============================================================
+
+// 方法论知识库默认占位文本（引导用户录入；不写死真实内容）
+export const METHODOLOGY_PLACEHOLDER = `在这里录入你的整套交易方法论，越详细，AI 分析越像你。建议包含：
+
+【A/B/C 三级入场信号】每一级的硬阈值（达到才算成立）
+- A 级：…
+- B 级：…
+- C 级：…
+
+【自审清单】开仓前逐项确认的条目
+1. …
+2. …
+
+【主线情景打分】历史结构 30% + 催化/想象 30% + 资金流行为 40%，各维度怎么打分
+
+【买卖点 & 仓位规则】什么时候买、买多少、什么时候卖、止损怎么设
+…`
+
+export function loadMethodology() {
+  try {
+    return localStorage.getItem(METHODOLOGY_KEY) ?? ''
+  } catch {
+    return ''
+  }
+}
+
+export function saveMethodology(text) {
+  localStorage.setItem(METHODOLOGY_KEY, text)
+}
+
+export function loadArchive() {
+  try {
+    const raw = localStorage.getItem(ARCHIVE_KEY)
+    return raw ? JSON.parse(raw) : []
+  } catch {
+    return []
+  }
+}
+
+export function saveArchive(items) {
+  localStorage.setItem(ARCHIVE_KEY, JSON.stringify(items))
 }
