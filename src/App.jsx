@@ -1,15 +1,17 @@
 import { useEffect, useState } from 'react'
-import { loadConfig, saveConfig, loadRecords, saveRecords } from './storage'
+import { loadConfig, saveConfig, loadRecords, saveRecords, loadWatchConfig, saveWatchConfig } from './storage'
 import NewDecision from './components/NewDecision'
 import RecordList from './components/RecordList'
 import Stats from './components/Stats'
+import DailyWatch from './components/DailyWatch'
 import Config from './components/Config'
 
-// 顶部四个标签页
+// 顶部标签页
 const TABS = [
   { key: 'new', label: '📝 新建决策' },
   { key: 'list', label: '📋 记录看板' },
   { key: 'stats', label: '📊 命中率' },
+  { key: 'watch', label: '⏰ 盯盘' },
   { key: 'config', label: '⚙️ 配置' },
 ]
 
@@ -19,10 +21,12 @@ export default function App() {
   // 配置与记录是全局共享状态，统一在这里持有，子组件通过 props 读写
   const [config, setConfig] = useState(loadConfig)
   const [records, setRecords] = useState(loadRecords)
+  const [watchNodes, setWatchNodes] = useState(loadWatchConfig)
 
   // 状态变化时自动持久化到 localStorage
   useEffect(() => { saveConfig(config) }, [config])
   useEffect(() => { saveRecords(records) }, [records])
+  useEffect(() => { saveWatchConfig(watchNodes) }, [watchNodes])
 
   // 新增一条记录
   function addRecord(rec) {
@@ -64,7 +68,15 @@ export default function App() {
         <RecordList records={records} onUpdate={updateRecord} onDelete={deleteRecord} />
       )}
       {tab === 'stats' && <Stats records={records} config={config} />}
-      {tab === 'config' && <Config config={config} onChange={setConfig} />}
+      {tab === 'watch' && <DailyWatch nodes={watchNodes} />}
+      {tab === 'config' && (
+        <Config
+          config={config}
+          onChange={setConfig}
+          watchNodes={watchNodes}
+          onWatchChange={setWatchNodes}
+        />
+      )}
     </div>
   )
 }
