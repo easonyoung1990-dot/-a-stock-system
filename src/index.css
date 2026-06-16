@@ -1,0 +1,196 @@
+/* ============================================================
+   index.css —— 全局样式
+   单列布局；针对 OPPO Find N 折叠屏（展开后约半屏窄屏）优化。
+   ============================================================ */
+
+:root {
+  --bg: #0f1115;
+  --panel: #1a1d24;
+  --panel-2: #232733;
+  --border: #2e3340;
+  --text: #e6e8ec;
+  --muted: #9aa0ab;
+  --accent: #4f9cff;
+  --green: #2ecc71;
+  --red: #ff5d5d;
+  --gold: #f5c542;
+
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 整体单列容器，窄屏优先 */
+#root {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 12px 14px 60px;
+}
+
+h1, h2, h3 { margin: 0 0 8px; line-height: 1.3; }
+h1 { font-size: 20px; }
+h2 { font-size: 17px; }
+h3 { font-size: 15px; }
+
+p { margin: 4px 0; }
+
+.muted { color: var(--muted); font-size: 13px; }
+
+/* 顶部标签：窄屏可横向滚动 */
+.tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+  -webkit-overflow-scrolling: touch;
+}
+.tabs button {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  background: var(--panel);
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 8px 14px;
+  font-size: 14px;
+  cursor: pointer;
+}
+.tabs button.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+/* 卡片面板 */
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 14px;
+}
+
+/* 表单元素，全部纵向堆叠 */
+label { display: block; font-size: 14px; margin: 10px 0 4px; }
+
+input[type='text'], input[type='number'], textarea, select {
+  width: 100%;
+  background: var(--panel-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 9px 10px;
+  font-size: 14px;
+}
+textarea { min-height: 64px; resize: vertical; }
+
+input[type='range'] { width: 100%; }
+
+/* 按钮 */
+button.btn {
+  width: 100%;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 11px;
+  font-size: 15px;
+  cursor: pointer;
+  margin-top: 12px;
+}
+button.btn.secondary { background: var(--panel-2); border: 1px solid var(--border); }
+button.btn.danger { background: var(--red); }
+button.btn-sm {
+  width: auto;
+  padding: 5px 10px;
+  font-size: 13px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--panel-2);
+  color: var(--text);
+  cursor: pointer;
+  margin: 0;
+}
+
+/* 信号等级徽标 */
+.badge {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.badge.A { background: rgba(255,93,93,.18); color: var(--red); }
+.badge.B { background: rgba(245,197,66,.18); color: var(--gold); }
+.badge.C { background: rgba(79,156,255,.18); color: var(--accent); }
+
+/* 自审清单项 */
+.check-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--border);
+}
+.check-row:last-child { border-bottom: none; }
+.check-row input[type='checkbox'] {
+  width: 18px; height: 18px; margin-top: 3px; flex: 0 0 auto;
+}
+
+/* 打分行 */
+.score-row { margin: 12px 0; }
+.score-head { display: flex; justify-content: space-between; align-items: baseline; }
+.score-val { font-weight: 600; color: var(--accent); }
+
+/* 综合分大字 */
+.composite {
+  text-align: center;
+  font-size: 34px;
+  font-weight: 700;
+  color: var(--gold);
+  margin: 6px 0;
+}
+
+/* 表格允许横向滚动，不超出屏宽 */
+.table-wrap { overflow-x: auto; max-width: 100%; }
+
+/* 结果标签 */
+.result-tag { font-weight: 600; }
+.result-tag.win { color: var(--green); }
+.result-tag.loss { color: var(--red); }
+.result-tag.pending { color: var(--muted); }
+
+/* 统计条形 */
+.bar-track {
+  background: var(--panel-2);
+  border-radius: 6px;
+  height: 22px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+.bar-fill {
+  height: 100%;
+  background: var(--green);
+  display: flex;
+  align-items: center;
+  padding-left: 8px;
+  font-size: 12px;
+  color: #06210f;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.row-flex { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.spacer { flex: 1; }
+.empty { text-align: center; color: var(--muted); padding: 24px 0; }
+hr { border: none; border-top: 1px solid var(--border); margin: 12px 0; }
