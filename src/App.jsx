@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react'
-import { loadMethodology, saveMethodology, loadArchive, saveArchive, genId } from './storage'
+import { loadMethodology, saveMethodology, loadArchive, saveArchive, loadMorning, saveMorning, genId } from './storage'
 import Analyze from './components/Analyze'
 import Archive from './components/Archive'
 import Methodology from './components/Methodology'
+import MorningReport from './components/MorningReport'
 
-// 精简后的三个标签页：分析 / 档案 / 我的方法论
+// 精简标签页：分析 / 晨报 / 档案 / 我的方法论
 const TABS = [
   { key: 'analyze', label: '🤖 分析' },
+  { key: 'morning', label: '📰 晨报' },
   { key: 'archive', label: '🗂 档案' },
   { key: 'method', label: '🧠 我的方法论' },
 ]
@@ -17,9 +19,18 @@ export default function App() {
   // 「我的方法论」=未来大模型的大脑；分析档案=历史记录
   const [methodology, setMethodology] = useState(loadMethodology)
   const [archive, setArchive] = useState(loadArchive)
+  const [morning, setMorning] = useState(loadMorning)
 
   useEffect(() => { saveMethodology(methodology) }, [methodology])
   useEffect(() => { saveArchive(archive) }, [archive])
+  useEffect(() => { saveMorning(morning) }, [morning])
+
+  function addMorning(item) {
+    setMorning((prev) => [item, ...prev])
+  }
+  function deleteMorning(id) {
+    setMorning((prev) => prev.filter((r) => r.id !== id))
+  }
 
   function addToArchive(report) {
     const item = { id: genId(), createdAt: new Date().toISOString(), ...report }
@@ -51,6 +62,9 @@ export default function App() {
       </nav>
 
       {tab === 'analyze' && <Analyze methodology={methodology} onArchive={addToArchive} />}
+      {tab === 'morning' && (
+        <MorningReport methodology={methodology} reports={morning} onSave={addMorning} onDelete={deleteMorning} />
+      )}
       {tab === 'archive' && <Archive items={archive} onDelete={deleteArchive} />}
       {tab === 'method' && <Methodology value={methodology} onChange={setMethodology} />}
     </div>

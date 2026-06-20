@@ -19,6 +19,8 @@ const WATCH_STATE_KEY = 'astock_watch_state_v1'
 const WATCH_PREF_KEY = 'astock_watch_pref_v1'
 const METHODOLOGY_KEY = 'astock_methodology_v1'
 const ARCHIVE_KEY = 'astock_ai_archive_v1'
+const WATCHLIST_KEY = 'astock_watchlist_v1'
+const MORNING_KEY = 'astock_morning_v1'
 
 // ---------- 默认方法论配置（用户可改）----------
 export const DEFAULT_CONFIG = {
@@ -231,4 +233,47 @@ export function loadArchive() {
 
 export function saveArchive(items) {
   localStorage.setItem(ARCHIVE_KEY, JSON.stringify(items))
+}
+
+// ---------- 每日晨报：关注清单 + 历史晨报 ----------
+
+// 关注清单默认占位（重点行业/题材 + X账号 + 标的池），可在「晨报」页编辑
+export const WATCHLIST_DEFAULT = `【重点行业 / 题材方向】（参考我方法论第5章题材地图）
+- AI 硬件 / 算力基础设施：光模块(CPO/800G/1.6T)、PCB高速板、铜缆DAC/AEC、液冷电源、HBM存储
+- 数据中心供电升级：800V DC / HVDC / SiC / GaN / 固态变压器
+- 资源/周期品：锡、碳酸锂、氟化工、铂族金属、化工品涨价
+- 机器人 / 物理AI：减速器、丝杠、传感器、灵巧手
+- 半导体设备、玻璃基板、AI PC、军工等阶段性方向
+
+【重点关注的 X / 信息源账号】（请填你常看的账号，每行一个）
+- （示例）@xxx
+-
+
+【标的池】（只在对应题材成为主线时调出，需重新验证）
+上海电力、华电辽能、华工科技、胜宏科技、立讯精密、中天科技、永鼎股份、民士达、祥和实业、贵研铂业、江波龙 …`
+
+export function loadWatchlist() {
+  try {
+    const saved = localStorage.getItem(WATCHLIST_KEY)
+    return saved && saved.trim() ? saved : WATCHLIST_DEFAULT
+  } catch {
+    return WATCHLIST_DEFAULT
+  }
+}
+
+export function saveWatchlist(text) {
+  localStorage.setItem(WATCHLIST_KEY, text)
+}
+
+export function loadMorning() {
+  try {
+    const raw = localStorage.getItem(MORNING_KEY)
+    return raw ? JSON.parse(raw) : []
+  } catch {
+    return []
+  }
+}
+
+export function saveMorning(items) {
+  localStorage.setItem(MORNING_KEY, JSON.stringify(items))
 }
